@@ -39,6 +39,7 @@
       $.ajax({
         url: 'https://openapi.twse.com.tw/v1/opendata/OpenData_BRK01',
         method: 'GET',
+        dataType: 'json', // 設定回應資料格式為 JSON
         success: function(data) {
           console.log(data); // 確認 API 回應格式
           const table = $('#dataTable').DataTable({
