@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台灣證交所公開資料</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+</head>
+
+<body>
+    <div id="nav-placeholder"></div>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">台灣證交所公開資料</h1>
+    <table id="dataTable" class="table table-striped table-bordered" style="width: 100%;">
+      <thead>
+        <tr>
+          <th>出表日期</th>
+          <th>證券商代號</th>
+          <th>男性員工人數</th>
+          <th>女性員工人數</th>
+          <th>總人數</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be loaded here -->
+      </tbody>
+    </table>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $.ajax({
+        url: 'https://openapi.twse.com.tw/v1/opendata/OpenData_BRK01',
+        method: 'GET',
+        dataType: 'json', // 指定期望的回應資料格式為 JSON
+        success: function(data) {
+          console.log(data); // 打印回應資料
+          const table = $('#dataTable').DataTable({
+            data: data,
+            columns: [{
+                data: '出表日期',
+                title: '出表日期'
+              },
+              {
+                data: '證券商代號',
+                title: '證券商代號'
+              },
+              {
+                data: '男性員工人數',
+                title: '男性員工人數'
+              },
+              {
+                data: '女性員工人數',
+                title: '女性員工人數'
+              },
+              {
+                data: '總人數',
+                title: '總人數'
+              },
+            ],
+            language: {
+              "sSearch": "搜尋:",
+              "sLengthMenu": "顯示 _MENU_ 筆資料",
+              "sInfo": "顯示 _START_ 到 _END_ 筆資料，共 _TOTAL_ 筆",
+              "sInfoEmpty": "顯示 0 到 0 筆資料，共 0 筆",
+              "sInfoFiltered": "(從 _MAX_ 筆資料中篩選)",
+              "oPaginate": {
+                "sPrevious": "上一頁",
+                "sNext": "下一頁"
+              }
+            }
+          });
+        },
+        error: function(err) {
+          console.error('API 請求失敗:', err);
+        }
+      });
+    });
+  </script>
+    
+  <div id="footer-placeholder"></div>
+</body>
+<script src="componet.js"></script>
+</html>
+
