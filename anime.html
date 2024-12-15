@@ -234,7 +234,7 @@
         });
       }
       $("#sort").on("change",function(){
-        generateAnimeCards(responses);
+        generateAnimeCards(responses.slice());
       })
       // 更新頁數顯示
       function updatePageIndicators() {
