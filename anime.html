@@ -119,6 +119,13 @@
 
   <!-- Page Control (Top) -->
   <div class="container my-3">
+    <div class="d-flex justify-content-end col-2 ms-auto">
+      <select class="form-select" id="sort">
+        <option value="預設">預設</option>
+        <option value="A-Z">A-Z</option>
+        <option value="Z-A">Z-A</option>
+      </select>
+    </div>
     <div class="page-controls">
       <button id="prev-page" class="btn btn-primary me-2">前一頁</button>
       <span id="current-page" class="fw-bold">Page: 1</span>
@@ -151,6 +158,16 @@
     AOS.init();
   </script>
   <script>
+    let responses;
+    // Sort the data based on the selected option
+    function sortAnimeData(data, sortOption) {
+      if (sortOption === "A-Z") {
+        return data.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+      } else if (sortOption === "Z-A") {
+        return data.sort((a, b) => b.name.toLowerCase().localeCompare(a.name.toLowerCase()));
+      }
+      return data; // No sorting if the option is "預設"
+    }
     $(document).ready(function() {
       let currentPage = 1; // 初始頁數
       const baseUrl = "https://api-anime-rouge.vercel.app/aniwatch/az-list?page=";
@@ -161,6 +178,7 @@
           url: baseUrl + page, // Use dynamic URL like `baseUrl + page`
           method: "GET",
           success: function(response) {
+            responses = response;
             generateAnimeCards(response); // Function to generate the cards
             updatePageIndicators(); // Function to update page indicators, like pagination
           },
@@ -183,7 +201,13 @@
       function generateAnimeCards(data) {
         const container = $("#anime-container");
         container.empty(); // 清空容器
-        data.forEach(anime => {
+        // Get the selected sort option
+        const sortOption = $("#sort").val();
+
+        // Sort the data based on the selected option
+        const sortedData = sortAnimeData(data, sortOption);
+
+        sortedData.forEach(anime => {
           const cardHtml = `
             <div class="col-md-4" data-aos="fade-up">
               <div class="card h-100 anime-card">
@@ -209,7 +233,9 @@
           container.append(cardHtml);
         });
       }
-
+      $("#sort").on("change",function(){
+        generateAnimeCards(responses);
+      })
       // 更新頁數顯示
       function updatePageIndicators() {
         $("#current-page, #current-page-bottom").text(`Page: ${currentPage}`);
