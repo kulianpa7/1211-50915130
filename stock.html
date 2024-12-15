@@ -11,17 +11,22 @@
 </head>
 
 <body>
-    <div id="nav-placeholder"></div>
+  <div id="nav-placeholder"></div>
   <div class="container mt-5">
     <h1 class="text-center mb-4">台灣證交所公開資料</h1>
     <table id="dataTable" class="table table-striped table-bordered" style="width: 100%;">
       <thead>
         <tr>
-          <th>出表日期</th>
-          <th>證券商代號</th>
-          <th>男性員工人數</th>
-          <th>女性員工人數</th>
-          <th>總人數</th>
+          <th>代碼</th>
+          <th>名稱</th>
+          <th>成交量</th>
+          <th>成交值</th>
+          <th>開盤價</th>
+          <th>最高價</th>
+          <th>最低價</th>
+          <th>收盤價</th>
+          <th>漲跌</th>
+          <th>交易次數</th>
         </tr>
       </thead>
       <tbody>
@@ -38,7 +43,7 @@
   <script>
     $(document).ready(function() {
       $.ajax({
-        url: 'https://openapi.twse.com.tw/v1/opendata/OpenData_BRK01',
+        url: 'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL',
         method: 'GET',
         dataType: 'json', // 指定期望的回應資料格式為 JSON
         success: function(data) {
@@ -46,25 +51,45 @@
           const table = $('#dataTable').DataTable({
             data: data,
             columns: [{
-                data: '出表日期',
-                title: '出表日期'
+                data: 'Code',
+                title: '代碼'
               },
               {
-                data: '證券商代號',
-                title: '證券商代號'
+                data: 'Name',
+                title: '名稱'
               },
               {
-                data: '男性員工人數',
-                title: '男性員工人數'
+                data: 'TradeVolume',
+                title: '成交量'
               },
               {
-                data: '女性員工人數',
-                title: '女性員工人數'
+                data: 'TradeValue',
+                title: '成交值'
               },
               {
-                data: '總人數',
-                title: '總人數'
+                data: 'OpeningPrice',
+                title: '開盤價'
               },
+              {
+                data: 'HighestPrice',
+                title: '最高價'
+              },
+              {
+                data: 'LowestPrice',
+                title: '最低價'
+              },
+              {
+                data: 'ClosingPrice',
+                title: '收盤價'
+              },
+              {
+                data: 'Change',
+                title: '漲跌'
+              },
+              {
+                data: 'Transaction',
+                title: '交易次數'
+              }
             ],
             language: {
               "sSearch": "搜尋:",
@@ -76,7 +101,11 @@
                 "sPrevious": "上一頁",
                 "sNext": "下一頁"
               }
-            }
+            },
+            lengthMenu: [
+              [100, 500, 1000, 10000],
+              ["100", "500", "1000", "10000"]
+            ],
           });
         },
         error: function(err) {
@@ -85,9 +114,9 @@
       });
     });
   </script>
-    
+
   <div id="footer-placeholder"></div>
 </body>
 <script src="componet.js"></script>
-</html>
 
+</html>
